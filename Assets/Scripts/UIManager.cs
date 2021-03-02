@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     GameObject[] pauseObjects;
     GameObject[] finishObjects;
-
+    [SerializeField]
+    Sprite checkedSprite;
+    [SerializeField]
+    Sprite uncheckedSprite;
+    public static bool isHardDiff;
     Rat ratController;
-
+    public AudioClip buttonSound;
+    public AudioSource audioSource;
+    public AudioClip mainMenuMusic;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +32,13 @@ public class UIManager : MonoBehaviour
             ratController = GameObject.FindGameObjectWithTag("Player").GetComponent<Rat>();
         }
 
+        if (Application.loadedLevelName == "MainMenu")
+        {
+            audioSource.Play();
+        }
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -49,6 +62,84 @@ public class UIManager : MonoBehaviour
             showFinished();
         }
 
+    }
+
+    public void PlayButtonSound()
+    {
+        audioSource.PlayOneShot(buttonSound);
+        
+    }
+
+    IEnumerator WaitForPlayButtonSound()
+    {
+        //Print the time of when the function is first called.
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSecondsRealtime(buttonSound.length - .3f);
+        LoadLevel("MainScene");
+
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+    }
+
+    public void SelectHardMode()
+    {   
+        if (isHardDiff)
+        {
+            GameObject.FindGameObjectWithTag("CheckBox").GetComponent<Image>().sprite = uncheckedSprite;
+            isHardDiff = false;
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("CheckBox").GetComponent<Image>().sprite = checkedSprite;
+            isHardDiff = true;
+        }
+        
+    }
+
+    public void PlayButtonOnClick()
+    {
+        PlayButtonSound();
+        StartCoroutine(WaitForPlayButtonSound());
+    }
+
+    public void RestartButtonOnClick()
+    {
+        PlayButtonSound();
+        StartCoroutine(WaitForRestartButtonSound());
+    }
+
+    IEnumerator WaitForRestartButtonSound()
+    {
+        //Print the time of when the function is first called.
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSecondsRealtime(buttonSound.length - .3f);
+        Reload();
+
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+    }
+
+    public void MainMenuButtonOnClick()
+    {
+        PlayButtonSound();
+        StartCoroutine(WaitForMainMenuButtonSound());
+    }
+
+    IEnumerator WaitForMainMenuButtonSound()
+    {
+        //Print the time of when the function is first called.
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSecondsRealtime(buttonSound.length - .3f);
+        LoadLevel("MainMenu");
+
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
     }
 
     //Reloads the Level

@@ -20,14 +20,14 @@ public class Spark : MonoBehaviour
     {
 
         Vector2 pos = Camera.main.WorldToViewportPoint(transform.position);
-        var rat = UnityEngine.GameObject.Find("Rat").GetComponent<Rat>();
+        var rat = GameObject.Find("Rat").GetComponent<Rat>();
         if (pos.x < 0.0)
         {
             transform.position = new Vector2(5, transform.position.y);
             sparkRotation++;
-            sparkSpeed += .2f;
+            sparkSpeed += .02f * rat.ChewCounter / 2;
         }
-        else if (transform.position.x < rat.transform.position.x)
+        else if (rat.isHardDiff && transform.position.x < rat.transform.position.x)
         {
             sparkRigidbody.velocity = new Vector2(-sparkSpeed*5, 0);
         }

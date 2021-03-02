@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ShowOnPause
   - ShowOnFinish
+  - CheckBox
   layers:
   - Default
   - TransparentFX
@@ -15,6 +16,7 @@ TagManager:
   - UI
   - 
   - 
+  - UIBackground
   - Background
   - 
   - 
@@ -38,8 +40,16 @@ TagManager:
   - 
   - 
   - 
-  - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 4019264365
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 951415557
+    locked: 0
+  - name: UIText
+    uniqueID: 3366686257
     locked: 0
